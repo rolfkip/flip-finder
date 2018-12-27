@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element label="Item" max_length="40" name="x_64382_flipportal_item" type="collection">
+        <element default="1" label="GE Limit" max_length="40" name="ge_limit" type="integer"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;return current.store_price * .6;&#13;&#10;&#13;&#10;})(current);" label="High Alch" max_length="40" name="high_alch" type="integer" virtual="true"/>
+        <element label="Id" max_length="40" name="id" type="integer"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;return current.store_price * .4;&#13;&#10;&#13;&#10;})(current);" label="Low Alch" max_length="40" name="low_alch" type="integer" virtual="true"/>
+        <element label="Members Only" max_length="40" name="members_only" type="boolean"/>
+        <element label="Name" max_length="40" name="name" type="string"/>
+        <element label="Store Price" max_length="40" name="store_price" type="integer"/>
+    </element>
+</database>

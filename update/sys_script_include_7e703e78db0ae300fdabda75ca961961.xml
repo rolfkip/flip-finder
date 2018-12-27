@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>x_64382_flipportal.HTTPBase</api_name>
+        <client_callable>false</client_callable>
+        <description/>
+        <name>HTTPBase</name>
+        <script><![CDATA[var HTTPBase = Class.create();
+HTTPBase.prototype = {
+    initialize: function () {
+        this.baseEndpoint = "";
+    },
+
+    _setBaseEndpoint: function (base) {
+        this.baseEndpoint = base;
+    },
+
+    _processPayload: function(payload){
+        if(typeof payload === 'string'){
+            return payload;
+        }
+        if(typeof payload === 'object'){
+            return JSON.stringify(payload);
+        }
+    },
+
+    _prepareRequest: function (req, options) {
+        if (options) {
+            if (options.hasOwnProperty('headers')) {
+                Object.keys(options.headers).forEach(function (key) {
+                    req.setRequestHeader(key, options.headers[key]);
+                });
+            }
+            if (options.hasOwnProperty('queryParams')) {
+                Object.keys(options.queryParams).forEach(function (key) {
+                    req.setQueryParameter(key, options.queryParams[key]);
+                });
+            }
+        }
+    },
+
+    _processResponse: function (res) {
+        return res;
+    },
+
+    _get: function (endpoint, options) {
+        var req = new sn_ws.RESTMessageV2();
+        req.setHttpMethod('GET');
+        req.setEndpoint(this.baseEndpoint.toString() + endpoint);
+        this._prepareRequest(req, options);
+        return this._processResponse(req.execute());
+    },
+
+    _post: function (endpoint, payload, options) {
+        var req = new sn_ws.RESTMessageV2();
+        req.setHttpMethod('POST');
+        req.setEndpoint(this.baseEndpoint.toString() + endpoint);
+        if(payload){
+            req.setRequestBody(this._processPayload(payload));
+        }
+        this._prepareRequest(req, options);
+        return this._processResponse(req.execute());
+    },
+
+    _put: function (endpoint, payload, options) {
+        var req = new sn_ws.RESTMessageV2();
+        req.setHttpMethod('PUT');
+        req.setEndpoint(this.baseEndpoint.toString() + endpoint);
+        if(payload){
+            req.setRequestBody(this._processPayload(payload));
+        }
+        this._prepareRequest(req, options);
+        return this._processResponse(req.execute());
+    },
+
+    _patch: function (endpoint, payload, options) {
+        var req = new sn_ws.RESTMessageV2();
+        req.setHttpMethod('PATCH');
+        req.setEndpoint(this.baseEndpoint.toString() + endpoint);
+        if(payload){
+            req.setRequestBody(this._processPayload(payload));
+        }
+        this._prepareRequest(req, options);
+        return this._processResponse(req.execute());
+    },
+
+    _delete: function (endpoint, options) {
+        var req = new sn_ws.RESTMessageV2();
+        req.setHttpMethod('DELETE');
+        req.setEndpoint(this.baseEndpoint.toString() + endpoint);
+        this._prepareRequest(req, options);
+        return this._processResponse(req.execute());
+    },
+
+    type: 'HTTPBase'
+};]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2018-11-26 01:28:32</sys_created_on>
+        <sys_id>7e703e78db0ae300fdabda75ca961961</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>HTTPBase</sys_name>
+        <sys_package display_value="Flip Portal" source="x_64382_flipportal">1e603e34db0ae300fdabda75ca961954</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_scope display_value="Flip Portal">1e603e34db0ae300fdabda75ca961954</sys_scope>
+        <sys_update_name>sys_script_include_7e703e78db0ae300fdabda75ca961961</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2018-11-26 01:28:32</sys_updated_on>
+    </sys_script_include>
+</record_update>

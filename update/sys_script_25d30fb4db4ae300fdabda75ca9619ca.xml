@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_script">
+    <sys_script action="INSERT_OR_UPDATE">
+        <abort_action>false</abort_action>
+        <access>package_private</access>
+        <action_delete>false</action_delete>
+        <action_insert>true</action_insert>
+        <action_query>false</action_query>
+        <action_update>false</action_update>
+        <active>true</active>
+        <add_message>false</add_message>
+        <advanced>true</advanced>
+        <change_fields>false</change_fields>
+        <client_callable>false</client_callable>
+        <collection>x_64382_flipportal_price_point</collection>
+        <condition/>
+        <description/>
+        <execute_function>false</execute_function>
+        <filter_condition/>
+        <is_rest>false</is_rest>
+        <message/>
+        <name>Write Calc Fields</name>
+        <order>100</order>
+        <priority>100</priority>
+        <rest_method/>
+        <rest_method_text/>
+        <rest_service/>
+        <rest_service_text/>
+        <rest_variables/>
+        <role_conditions/>
+        <script><![CDATA[(function executeRule(current, previous /*null when async*/) {
+
+	var pp = new GlideRecord(current.getValue('sys_class_name'));
+	pp.addQuery('sys_id!=' + current.getUniqueValue() + '^item=' + current.item.sys_id.toString());
+	pp.orderByDesc('timestamp');
+	pp.query();
+	if(pp.next()) {
+		var bpd = current.buy_price - pp.buy_price;
+		if(bpd != 0) {
+			current.buy_price_change = bpd;
+			current.buy_price_change_percent = (((bpd) / current.buy_price) * 100).toFixed(2);
+		} else {
+			current.buy_price_change = pp.buy_price_change;
+			current.buy_price_change_percent = pp.buy_price_change_percent;
+		}
+		
+		var spd = current.sell_price - pp.sell_price;
+		if(spd != 0) {
+			current.sell_price_change = spd;
+			current.sell_price_change_percent = (((spd) / current.sell_price) * 100).toFixed(2);
+		} else {
+			current.sell_price_change = pp.sell_price_change;
+			current.sell_price_change_percent = pp.sell_price_change_percent;
+		}
+	} else {
+		current.buy_price_change = 0;
+		current.buy_price_change_percent = 0;
+		current.sell_price_change = 0;
+		current.sell_price_change_percent = 0;
+	}
+
+})(current, previous);]]></script>
+        <sys_class_name>sys_script</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2018-11-26 03:08:17</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>25d30fb4db4ae300fdabda75ca9619ca</sys_id>
+        <sys_mod_count>7</sys_mod_count>
+        <sys_name>Write Calc Fields</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="Flip Portal" source="x_64382_flipportal">1e603e34db0ae300fdabda75ca961954</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Flip Portal">1e603e34db0ae300fdabda75ca961954</sys_scope>
+        <sys_update_name>sys_script_25d30fb4db4ae300fdabda75ca9619ca</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2018-11-26 07:38:04</sys_updated_on>
+        <template/>
+        <when>before</when>
+    </sys_script>
+    <sys_translated_text action="delete_multiple" query="documentkey=25d30fb4db4ae300fdabda75ca9619ca"/>
+</record_update>

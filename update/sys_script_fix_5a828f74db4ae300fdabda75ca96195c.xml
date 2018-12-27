@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_fix">
+    <sys_script_fix action="INSERT_OR_UPDATE">
+        <active>false</active>
+        <before>false</before>
+        <description/>
+        <flush_cache>false</flush_cache>
+        <name>Import GE Limits from Pokedex</name>
+        <record_for_rollback>false</record_for_rollback>
+        <run_once>false</run_once>
+        <script><![CDATA[var item = new GlideRecord('x_64382_pokedex_item');
+item.query();
+while(item.next()) {
+	if(item.ge_limit != 0) {
+		var it = new GlideRecord('x_64382_flipportal_item');
+		if(it.get('name', item.getValue('name'))) {
+			it.ge_limit = item.getValue('ge_limit');
+			it.update();
+		} else {
+			gs.info('error on item ' + item.getValue('name'));
+		}
+	}
+}]]></script>
+        <sys_class_name>sys_script_fix</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2018-11-26 02:50:35</sys_created_on>
+        <sys_id>5a828f74db4ae300fdabda75ca96195c</sys_id>
+        <sys_mod_count>2</sys_mod_count>
+        <sys_name>Import GE Limits from Pokedex</sys_name>
+        <sys_package display_value="Flip Portal" source="x_64382_flipportal">1e603e34db0ae300fdabda75ca961954</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Flip Portal">1e603e34db0ae300fdabda75ca961954</sys_scope>
+        <sys_update_name>sys_script_fix_5a828f74db4ae300fdabda75ca96195c</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2018-11-26 02:52:04</sys_updated_on>
+        <unloadable>false</unloadable>
+    </sys_script_fix>
+</record_update>

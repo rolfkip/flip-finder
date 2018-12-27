@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_fix">
+    <sys_script_fix action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <before>false</before>
+        <description/>
+        <flush_cache>false</flush_cache>
+        <name>Import Old Graph Data</name>
+        <record_for_rollback>false</record_for_rollback>
+        <run_once>false</run_once>
+        <script><![CDATA[var ge = new GrandExchangeClient();
+
+var item = new GlideRecord('x_64382_flipportal_item');
+item.query();
+while(item.next()) {
+	gs.info(item.getValue('name'));
+	var graph = ge.getItem(30, item.getValue('id'));
+	if(!graph.error) {
+		var body = JSON.parse(graph.body);
+		for(var i=0; i<body.length; i++) {
+			var point = body[i];
+			var pp = new GlideRecord('x_64382_flipportal_price_point');
+			pp.newRecord();
+			pp.item = item.getUniqueValue();
+			var gdt = new GlideDateTime();
+			gdt.setValue(point.ts);
+			pp.timestamp = gdt;
+			pp.sell_price = point.sellingPrice;
+			pp.buy_price = point.buyingPrice;
+			pp.average_price = point.overallPrice;
+			pp.sell_quantity = point.sellingQuantity;
+			pp.buy_quantity = point.buyingQuantity;
+			pp.overall_quantity = point.overallQuantity;
+			pp.insert();
+		}
+	}
+}]]></script>
+        <sys_class_name>sys_script_fix</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2018-11-26 06:07:35</sys_created_on>
+        <sys_id>191b6738dbcae300fdabda75ca961958</sys_id>
+        <sys_mod_count>4</sys_mod_count>
+        <sys_name>Import Old Graph Data</sys_name>
+        <sys_package display_value="Flip Portal" source="x_64382_flipportal">1e603e34db0ae300fdabda75ca961954</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Flip Portal">1e603e34db0ae300fdabda75ca961954</sys_scope>
+        <sys_update_name>sys_script_fix_191b6738dbcae300fdabda75ca961958</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2018-11-26 06:25:30</sys_updated_on>
+        <unloadable>false</unloadable>
+    </sys_script_fix>
+</record_update>

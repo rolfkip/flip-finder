@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element extends="x_64382_flipportal_price_point" label="Price Point - 12 Hour" max_length="40" name="x_64382_flipportal_price_point_12_hour" sizeclass="6956" type="collection"/>
+</database>

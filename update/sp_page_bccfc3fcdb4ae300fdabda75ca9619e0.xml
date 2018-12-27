@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_page">
+    <sp_page action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <css/>
+        <draft>false</draft>
+        <dynamic_title_structure/>
+        <id>flip_home</id>
+        <internal>false</internal>
+        <public>false</public>
+        <roles/>
+        <short_description/>
+        <sys_class_name>sp_page</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2018-11-26 03:44:54</sys_created_on>
+        <sys_id>bccfc3fcdb4ae300fdabda75ca9619e0</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>flip_home</sys_name>
+        <sys_package display_value="Flip Portal" source="x_64382_flipportal">1e603e34db0ae300fdabda75ca961954</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Flip Portal">1e603e34db0ae300fdabda75ca961954</sys_scope>
+        <sys_update_name>sp_page_bccfc3fcdb4ae300fdabda75ca9619e0</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2018-11-26 03:44:54</sys_updated_on>
+        <title>Flip Home</title>
+    </sp_page>
+    <sys_translated_text action="delete_multiple" query="documentkey=bccfc3fcdb4ae300fdabda75ca9619e0"/>
+</record_update>

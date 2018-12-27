@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element label="Price Point" max_length="40" name="x_64382_flipportal_price_point" sizeclass="348080" type="collection">
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;var item = current.item.getRefRecord();&#13;&#10;&#9;return item.getValue('high_alch') - current.getValue('sell_price');&#13;&#10;&#13;&#10;})(current);" label="Alch Profit" max_length="40" name="alch_profit" type="integer" virtual="true"/>
+        <element label="Average Price" max_length="40" name="average_price" type="integer"/>
+        <element label="Buy Outdated" max_length="40" name="buy_outdated" type="boolean"/>
+        <element label="Insta-Buy Price" max_length="40" name="buy_price" type="integer"/>
+        <element label="Buy Price Change" max_length="40" name="buy_price_change" type="integer"/>
+        <element label="Buy Price Change Percent" max_length="40" name="buy_price_change_percent" type="float"/>
+        <element label="Buy Quantity" max_length="40" name="buy_quantity" type="integer"/>
+        <element label="Item" max_length="32" name="item" reference="x_64382_flipportal_item" type="reference"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;return current.buy_price - current.sell_price;&#13;&#10;&#13;&#10;})(current);" label="Margin" max_length="40" name="margin" type="integer" virtual="true"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;return (((current.buy_price - current.sell_price) / current.buy_price) * 100).toFixed(2);&#13;&#10;&#13;&#10;})(current);" label="Margin Percent" max_length="40" name="margin_percent" type="float" virtual="true"/>
+        <element label="Overall Quantity" max_length="40" name="overall_quantity" type="integer"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;var item = current.item.getRefRecord();&#13;&#10;&#9;return item.getValue('ge_limit') * current.getValue('margin');&#13;&#10;&#13;&#10;})(current);" label="Profit Limit" max_length="40" name="profit_limit" type="integer" virtual="true"/>
+        <element label="Sell Outdated" max_length="40" name="sell_outdated" type="boolean"/>
+        <element label="Insta-Sell Price" max_length="40" name="sell_price" type="integer"/>
+        <element label="Sell Price Change" max_length="40" name="sell_price_change" type="integer"/>
+        <element label="Sell Price Change Percent" max_length="40" name="sell_price_change_percent" type="float"/>
+        <element label="Sell Quantity" max_length="40" name="sell_quantity" type="integer"/>
+        <element default="javascript:current.getTableName();" label="Class" max_length="80" name="sys_class_name" type="sys_class_name"/>
+        <element label="Timestamp" max_length="40" name="timestamp" type="glide_date_time"/>
+        <index name="index">
+            <element name="item"/>
+        </index>
+        <index name="index2">
+            <element name="sys_class_name"/>
+        </index>
+    </element>
+</database>

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[function($scope, spUtil) {
+  /* widget controller */
+  var c = this;
+	
+	c.graphNewTime = function(event) {
+		var clicked = event.target || event.srcElement;
+		c.data.graphAgo = clicked.id;
+		c.server.update().then(function(response) {
+			toggleGraphButton(clicked);
+		});
+	}
+	
+	function toggleGraphButton(clicked) {
+		var activeButton = clicked.parentElement.querySelector(".active");
+		
+		if(activeButton) {
+			activeButton.classList.remove("active");
+		}
+		
+		clicked.className += " active";
+	}
+	
+	$scope.item = {
+		displayValue: c.data.item.name,
+		value: c.data.item.sys_id,
+		name: 'item'
+	}
+	
+	$scope.$on("field.change", function(evt, parms) {
+		if(parms.field.name == 'item') {
+			c.data.setItem = parms.newValue;
+		}
+		
+		c.server.update().then(function(response) {
+			spUtil.update($scope);
+		});
+	});
+}]]></client_script>
+        <controller_as>c</controller_as>
+        <css/>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>false</has_preview>
+        <id>flip_graph</id>
+        <internal>false</internal>
+        <link/>
+        <name>Flip Graph</name>
+        <option_schema/>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function() {
+	/* populate the 'data' object */
+	/* e.g., data.table = $sp.getValue('table'); */
+
+	var itemSysId, graphAgo;
+	if(!input) {
+		itemSysId = "b352cb74db4ae300fdabda75ca961927";
+		graphAgo = "@hour@ago@24";
+	} else {
+		if(input.setItem) {
+			itemSysId = input.setItem;
+		} else {
+			itemSysId = input.item.sys_id;
+		}
+		if(input.graphAgo) {
+			graphAgo = input.graphAgo;
+		} else {
+			//graphAgo = 
+		}
+	}
+
+	graphItem(itemSysId, graphAgo);
+
+	function graphItem(itemSysId, graphAgo) {
+		var item_gr = new GlideRecord('x_64382_flipportal_item');
+		item_gr.get(itemSysId);
+		data.item = {};
+		$sp.getRecordDisplayValues(data.item, item_gr, 'sys_id,name,buy_price,sell_price,average_price,timestamp');
+
+		data.labels = [];
+		data.series = ['Buy Price', 'Sell Price'];
+		data.data = [];
+		data.data[0] = [];
+		data.data[1] = [];
+
+		var pp_gr = new GlideRecord('x_64382_flipportal_price_point');
+		pp_gr.orderBy('timestamp');
+		pp_gr.addQuery('item=' + itemSysId + '^timestampRELATIVEGE' + graphAgo);
+		pp_gr.query();
+		while(pp_gr.next()) {
+			data.labels.push(pp_gr.getDisplayValue('timestamp'));
+			if(pp_gr.getValue('buy_price') != 0) {
+				data.data[0].push(pp_gr.getValue('buy_price'));
+			} else {
+				data.data[0].push(null);
+			}
+
+			if(pp_gr.getValue('sell_price') != 0) {
+				data.data[1].push(pp_gr.getValue('sell_price'));
+			} else {
+				data.data[1].push(null);
+			}
+		}
+
+		data.options = {
+			title: {
+				display: true,
+				text: data.item.name
+			},
+			tooltips: {
+				callbacks: {}
+			}
+		};
+
+		data.options.tooltips.callbacks.label = function(tooltipItem, data) {
+			return data.labels[tooltipItem.index] + "example";
+		};
+	}
+
+	/*function(t, d) {
+					return "example";
+				};*/
+
+	//data.labels = ["Download Sales", "In-Store Sales", "Mail-Order Sales"];
+	//data.data = [300, 500, 100];
+})();]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2018-11-26 03:45:32</sys_created_on>
+        <sys_id>c2efc3fcdb4ae300fdabda75ca96190e</sys_id>
+        <sys_mod_count>21</sys_mod_count>
+        <sys_name>Flip Graph</sys_name>
+        <sys_package display_value="Flip Portal" source="x_64382_flipportal">1e603e34db0ae300fdabda75ca961954</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Flip Portal">1e603e34db0ae300fdabda75ca961954</sys_scope>
+        <sys_update_name>sp_widget_c2efc3fcdb4ae300fdabda75ca96190e</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2018-11-29 02:22:17</sys_updated_on>
+        <template><![CDATA[<div>
+  <sn-record-picker field="item" table="'x_64382_flipportal_item'" display-field="'name'" value-field="'sys_id'" search-fields="'name'" page-size="20"></sn-record-picker>
+	<div class="btn-toolbar" ng-click="c.graphNewTime($event)">
+    <div class="btn-group pull-right graph-buttons">
+      <a class="btn btn-default" id="@dayofweek@ago@7">Week</a>
+      <a class="btn btn-default" id="@dayofweek@ago@3">3 days</a>
+      <a class="btn btn-default active" id="@hour@ago@24">1 day</a>
+    </div>
+  </div>
+  <canvas id="line" class="chart chart-line"
+     chart-data="c.data.data" chart-colors="c.data.colors" chart-labels="c.data.labels" chart-series="c.data.series" chart-options="c.data.options">
+  </canvas>
+</div>]]></template>
+    </sp_widget>
+</record_update>

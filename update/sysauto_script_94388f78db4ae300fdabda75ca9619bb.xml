@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sysauto_script">
+    <sysauto_script action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <condition/>
+        <conditional>false</conditional>
+        <name>Import Price Point Data</name>
+        <run_as display_value="System Administrator">6816f79cc0a8016401c5a33be04be441</run_as>
+        <run_as_tz/>
+        <run_dayofmonth>1</run_dayofmonth>
+        <run_dayofweek>1</run_dayofweek>
+        <run_period>1970-01-01 00:05:00</run_period>
+        <run_start>2018-11-26 02:00:00</run_start>
+        <run_time>1970-01-01 08:15:00</run_time>
+        <run_type>periodically</run_type>
+        <script><![CDATA[var ge = new GrandExchangeClient();
+var items = ge.summary();
+if(!items.error) {
+	var body = JSON.parse(items.body);
+	for(var id in body) {
+		var item = body[id];
+		var item_gr = new GlideRecord('x_64382_flipportal_item');
+		if(item_gr.get('id', id)) {
+			var pp2 = new GlideRecord('x_64382_flipportal_price_point');
+			pp2.orderByDesc('timestamp');
+			pp2.addQuery('item', item_gr.getUniqueValue());
+			pp2.query();
+			
+			var pp = new GlideRecord('x_64382_flipportal_price_point');
+			pp.newRecord();
+			
+			if(pp2.next()) {
+				if(item.sell_average == 0) {
+					pp.sell_price = pp2.sell_price;
+					pp.sell_outdated = 'true';
+				} else {
+					pp.sell_price = item.sell_average;
+				}
+				if(item.buy_average == 0) {
+					pp.buy_price = pp2.buy_price;
+					pp.buy_outdated = 'true';
+				} else {
+					pp.buy_price = item.buy_average;
+				}
+			} else {
+				pp.buy_price = item.buy_average;
+				pp.sell_price = item.sell_average;
+			}
+
+			pp.average_price = item.overall_average;
+			pp.buy_quantity = item.buy_quantity;
+			pp.sell_quantity = item.sell_quantity;
+			pp.overall_quantity = item.overall_quantity;
+			pp.item = item_gr.getUniqueValue();
+			pp.timestamp = new GlideDateTime();
+			pp.update();
+		} else {
+			gs.info('Item {0} is not yet in the items database!', item.name);
+		}
+	}
+}
+
+]]></script>
+        <sys_class_name>sysauto_script</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2018-11-26 03:21:30</sys_created_on>
+        <sys_id>94388f78db4ae300fdabda75ca9619bb</sys_id>
+        <sys_mod_count>3</sys_mod_count>
+        <sys_name>Import Price Point Data</sys_name>
+        <sys_package display_value="Flip Portal" source="x_64382_flipportal">1e603e34db0ae300fdabda75ca961954</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Flip Portal">1e603e34db0ae300fdabda75ca961954</sys_scope>
+        <sys_update_name>sysauto_script_94388f78db4ae300fdabda75ca9619bb</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2018-11-26 07:07:10</sys_updated_on>
+        <upgrade_safe>false</upgrade_safe>
+    </sysauto_script>
+</record_update>

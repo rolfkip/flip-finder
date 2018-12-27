@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>public</access>
+        <active>true</active>
+        <api_name>x_64382_flipportal.GrandExchangeClient</api_name>
+        <client_callable>false</client_callable>
+        <description/>
+        <name>GrandExchangeClient</name>
+        <script><![CDATA[var GrandExchangeClient = Class.create();
+GrandExchangeClient.prototype = Object.extendsObject(x_64382_flipportal.HTTPBase, {
+    initialize: function() {
+		this.baseEndpoint = 'https://storage.googleapis.com/osbuddy-exchange';
+    },
+	
+	getItem: function(time, id) {
+		return this._get('/graphs/' + time + "/" + id + ".json", {});
+	},
+	
+	summary: function() {
+		return this._get('/summary.json', {});
+	},
+	
+	_prepareRequest: function(req, options) {
+		options.headers = {};
+		options.headers["Content-Type"] = "application/json";
+		x_64382_flipportal.HTTPBase.prototype._prepareRequest.call(this, req, options);
+	},
+	
+	_processResponse: function(res) {
+		var response = {};
+		response.status_code = res.getStatusCode();
+		response.body = res.getBody();
+		if(res.getStatusCode() > 199 && res.getStatusCode() < 300) {
+			response.error = false;
+		} else {
+			response.error = true;
+		}
+		return response;
+	},
+
+    type: 'GrandExchangeClient'
+});]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2018-11-26 01:29:50</sys_created_on>
+        <sys_id>51a0fa38db0ae300fdabda75ca961934</sys_id>
+        <sys_mod_count>1</sys_mod_count>
+        <sys_name>GrandExchangeClient</sys_name>
+        <sys_package display_value="Flip Portal" source="x_64382_flipportal">1e603e34db0ae300fdabda75ca961954</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_scope display_value="Flip Portal">1e603e34db0ae300fdabda75ca961954</sys_scope>
+        <sys_update_name>sys_script_include_51a0fa38db0ae300fdabda75ca961934</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2018-11-26 05:03:33</sys_updated_on>
+    </sys_script_include>
+</record_update>
